@@ -1,6 +1,6 @@
 # Docker
 
-1. 从模板创建 `docker-compose.override.yml` 文件
+1. 从模板创建 `docker-compose.override.yml` 文件 
 `cp docker-compose.override.yml.template docker-compose.override.yml`
 
 2. 添加service，添加内容到 `docker-compose.override.yml`
@@ -26,5 +26,8 @@ cmap项目
       - [CMAP_PROJECT_PATH]:/var/www/html
       - [THEMES_PATH]:/var/www/themes
 ```
-3. 启动
+4. 添加 [container_name] 的配置到nginx配置文件
+5. 下载 cert.crt cert.key dhparam.pem 到 etc/nginx/certs目录下
+6. 启动
 `./scripts/docker.sh start`  
+
