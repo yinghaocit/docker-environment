@@ -1,0 +1,31 @@
+#!/bin/bash
+ENV_FILE_PATH="$CURRENT_DIR/.env"
+
+# Load the environment variables, and validate if required variables are defined
+check_env_file() {
+  # Check the existance of the .env file, and source them
+  if [ -f $ENV_FILE_PATH ]; then
+    source $ENV_FILE_PATH
+  else
+    echo 'Please make sure your .env file is existed under the project root directory'
+    exit 1
+  fi
+
+  # Check the environment variables
+  check_required_variable "$PROJECT_KEY" "PROJECT_KEY"
+  check_required_variable "$PHP_VERSION" "PHP_VERSION"
+
+  if [[ "$(type -t check_database_env)" == "function" ]]; then
+    check_database_env
+  fi
+
+}
+
+# $1, the variable value
+# $2, the variable name
+check_required_variable() {
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "$2 must be defined in your .env file"
+    exit 1
+  fi
+}

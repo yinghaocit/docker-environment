@@ -1,0 +1,123 @@
+services:
+  web-server:
+    container_name: ${PROJECT_KEY}-web-server
+    image: ciandtchina/drupal-web:php${PHP_VERSION}-fpm-apache
+    environment:
+      - APACHE_RUN_USER=docker
+      - APACHE_RUN_GROUP=docker
+      - CURRENT_USER_UID=${CURRENT_USER_UID}
+      - CURRENT_USER_GID=${CURRENT_USER_GID}
+    networks:
+      default-network:
+    expose:
+      - "80"
+      - "443"
+
+  database-mysql:
+    container_name: ${PROJECT_KEY}-database
+    image: mysql:${MYSQL_VERSION}
+    command: mysqld --max_allowed_packet=768M
+    networks:
+      default-network:
+    restart: always
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./persist-data/db-data:/var/lib/mysql
+
+  database-mariadb:
+    container_name: ${PROJECT_KEY}-database
+    image: mariadb
+    command: --max_allowed_packet=768M
+    networks:
+      default-network:
+    restart: always
+    expose:
+      - "3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - ./persist-data/db-data:/var/lib/mysql
+
+  memcached:
+    container_name: ${PROJECT_KEY}-memcached
+    image: memcached:1.5
+    networks:
+      default-network:
+    restart: always
+    expose:
+      - "11211"
+
+  nginx:
+    container_name: ${PROJECT_KEY}-nginx
+    image: nginx:1-alpine
+    networks:
+      default-network:
+    restart: always
+    volumes:
+      - ./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./etc/nginx/certs:/etc/nginx/ssl_certs/
+    expose:
+      - "80"
+      - "443"
+
+  varnish:
+    container_name: ${PROJECT_KEY}-varnish
+    image: ciandtchina/docker-varnish:6.0
+    networks:
+      default-network:
+    expose:
+      - "80"
+    environment:
+      - VARNISH_MEMORY=1G
+    volumes:
+      - ./etc/varnish/core.vcl:/usr/local/etc/varnish/core.vcl
+      - ./etc/varnish/default.vcl:/usr/local/etc/varnish/default.vcl
+
+  smtp-server:
+    container_name: ${PROJECT_KEY}-smtp-server
+    image: namshi/smtp
+    networks:
+      default-network:
+    restart: always
+    expose:
+      - "25"
+
+  apache-solr:
+    container_name: ${PROJECT_KEY}-apache-solr
+    image: solr:7-alpine
+    networks:
+      default-network:
+    expose:
+      - "8983"
+    volumes:
+      - ../persist-data/solr-data:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - mycore
+
+  syslog:
+    container_name: ${PROJECT_KEY}-syslog
+    image: balabit/syslog-ng
+    expose:
+      - "514"
+    networks:
+      default-network:
+    volumes:
+      - ../persist-data/logs:/var/log/syslog-ng
+      - ./etc/syslog-ng/syslog-ng.conf:/etc/syslog-ng/syslog-ng.conf
+    cap_add:
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - DAC_READ_SEARCH
+      - DAC_OVERRIDE
+      - CHOWN
+      - SYSLOG
+
+networks:
+  default-network:

@@ -1,0 +1,6 @@
+/persist-data
+
+.env
+.idea
+
+docker-compose.override.yml

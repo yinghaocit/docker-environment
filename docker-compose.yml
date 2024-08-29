@@ -1,0 +1,13 @@
+services:
+  nginx:
+    extends:
+      file: docker-compose.common.yml
+      service: nginx
+    ports:
+      - "443:443"
+  database:
+    extends:
+      file: docker-compose.common.yml
+      service: database-mariadb
+    ports:
+      - "3306:3306"

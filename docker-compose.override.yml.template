@@ -1,0 +1,17 @@
+x-base-service: &base_service
+  image: ciandtchina/drupal-web:php${PHP_VERSION}-apache-devpack
+  build:
+    context: .
+    dockerfile: images/php${PHP_VERSION}-apache-devpack/Dockerfile
+  restart: always
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+  networks:
+    default-network:
+
+networks:
+  default-network:
+    external:
+      name: ${PROJECT_KEY}-default-network
+
+services:
