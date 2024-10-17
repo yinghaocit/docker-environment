@@ -18,7 +18,7 @@ RUN apt-get -y install npm \
   && npm install -g n \
   && n 6
 
-RUN curl -L -o /usr/local/bin/composer https://getcomposer.org/download/2.7.2/composer.phar \
+RUN curl -L -o /usr/local/bin/composer https://getcomposer.org/download/2.8.1/composer.phar \
   && chmod a+x /usr/local/bin/composer
 
 # Install php ext

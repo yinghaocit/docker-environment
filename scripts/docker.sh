@@ -4,7 +4,7 @@
 #   ./docker.sh stop
 set -e
 
-CURRENT_DIR="/home/lctnmee/Documents/project/docker-environment"
+CURRENT_DIR=$(pwd)
 
 . $CURRENT_DIR/scripts/.common_func
 
