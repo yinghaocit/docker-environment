@@ -1,9 +1,9 @@
-# Docker
-
+# Docker 环境启动
+## Docker 配置
 1. 从模板创建 `docker-compose.override.yml` 文件 
 `cp docker-compose.override.yml.template docker-compose.override.yml`
 
-2. 添加service，添加内容到 `docker-compose.override.yml`
+2. 添加service内容到 `docker-compose.override.yml`
 ```
 services:
 
@@ -27,7 +27,15 @@ cmap项目
       - [THEMES_PATH]:/var/www/themes
 ```
 4. 添加 [container_name] 的配置到nginx配置文件
-5. 下载 cert.crt cert.key dhparam.pem 到 etc/nginx/certs目录下
-6. 启动
+5. 启动
 `./scripts/docker.sh start`  
 
+## 关于证书
+1. 安装 [mkcert](https://github.com/FiloSottile/mkcert) `sudo apt install mkcert`
+2. 进入etc/nignx/certs目录
+3. 生成证书 `mkcert loca.cmap.com`
+4. 将证书导入倒浏览器 `mkcert -install` （支持google chrome 和 Firefox）
+
+## Q&A
+1. /tmp/debug.log 文件权限问题
+2. id_rsa 权限问题

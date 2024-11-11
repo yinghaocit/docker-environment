@@ -9,10 +9,6 @@ ENV PATH="/var/www/html/vendor/bin:${PATH}"
 RUN apt-get update \
   && apt-get -y install ssh rsync git unzip vim libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev
 
-# Fix cannot connect mysql with caching_sha2_password plugin.
-RUN apt-get -y install software-properties-common \
-  && apt-get -y install libmariadbclient-dev
-
 # Install npm
 RUN apt-get -y install npm \
   && npm install -g n \
