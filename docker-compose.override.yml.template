@@ -1,9 +1,14 @@
 x-base-service: &base_service
-  image: ciandtchina/drupal-web:php${PHP_VERSION}-apache-devpack
+  image: yinghao/drupal-web:php8.1-apache-devpack
   build:
     context: .
     dockerfile: images/php${PHP_VERSION}-apache-devpack/Dockerfile
   restart: always
+  environment:
+    - APACHE_RUN_USER=docker
+    - APACHE_RUN_GROUP=docker
+    - CURRENT_USER_UID=${CURRENT_USER_UID}
+    - CURRENT_USER_GID=${CURRENT_USER_GID}
   extra_hosts:
     - "host.docker.internal:host-gateway"
   networks:
