@@ -1,0 +1,68 @@
+x-service: &web-service
+  platform: linux/x86_64
+  networks:
+    - default-network
+  image: local/web-service:1.0.2
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+  build:
+    context: .
+    dockerfile: images/php8.3-apache-devpack/Dockerfile
+
+services:
+  cmap-web-server:
+    <<: *web-service
+    container_name: cmap-web-server
+    volumes:
+      - ~/Projects/ciandt/cmap:/var/www/html
+      - ~/Projects/ciandt/themes:/var/www/themes
+      - ./etc/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./etc/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ~/.ssh/id_rsa_ciandt:/var/www/keys/id_rsa
+
+  # cba-web-server:
+  #   <<: *web-service
+  #   container_name: cba-web-server
+  #   volumes:
+  #     - ~/Projects/ciandt/ciandt-cba:/var/www/html
+  #     - ./etc/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+  #     - ~/.ssh/id_rsa_ciandt:/var/www/keys/id_rsa
+
+
+#  covermore-operations-web-server:
+#    <<: *web-service
+#    container_name: covermore-operations-web-server
+#    volumes:
+#      - ~/Documents/project/ciandt/covermore-operations:/var/www/html
+#      - ~/.ssh/id_rsa_ciandt:/var/www/keys/id_rsa
+
+#  study-web-server:
+#    <<: *web-service
+#    container_name: study-web-server
+#    volumes:
+#      - ~/Documents/project/personal/drupal-study/drupal10:/var/www/html
+#      - ./etc/apache2/config/web.conf:/etc/apache2/sites-available/000-default.conf
+#      - ./etc/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#
+#  jsjd.dev:
+#    build:
+#      context: ./images/php8.2-laravel
+#      dockerfile: Dockerfile
+#    image: sail-8.2/app
+#    extra_hosts:
+#      - 'host.docker.internal:host-gateway'
+#    ports:
+#      - '${APP_PORT:-80}:80'
+#      - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+#    environment:
+#      LARAVEL_SAIL: 1
+#      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+#      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+#      IGNITION_LOCAL_SITES_PATH: '${PWD}'
+#    volumes:
+#      - '~/Documents/project/personal/jsjd/backend:/var/www/html'
+#    networks:
+#      - default-network
+
+networks:
+  default-network:

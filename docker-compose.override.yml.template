@@ -1,0 +1,23 @@
+x-service: &web-service
+  networks:
+    - default-network
+  image: local/web-service:1.0.0
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+  build:
+    context: .
+    dockerfile: images/php8.3-apache-devpack/Dockerfile
+
+services:
+  cmap-web-server:
+    <<: *web-service
+    container_name: cmap-web-server
+    volumes:
+      - ~/Projects/ciandt/cmap:/var/www/html
+      - ~/Projects/ciandt/themes:/var/www/themes
+      - ./etc/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./etc/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ~/.ssh/id_rsa_ciandt:/var/www/keys/id_rsa
+
+networks:
+  default-network:

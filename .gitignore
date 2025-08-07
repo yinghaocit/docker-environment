@@ -1,0 +1,5 @@
+/persist-data/
+/etc/nginx
+!/etc/nginx/config/nignx.conf.template
+
+.idea

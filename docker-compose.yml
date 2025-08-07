@@ -1,0 +1,37 @@
+services:
+  nginx:
+    platform: linux/x86_64
+    container_name: nginx
+    image: nginx:latest
+    networks:
+      - default-network
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./etc/nginx/certs/:/etc/nginx/ssl_certs/
+      - ./etc/nginx/config/:/etc/nginx/conf.d/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - "443:443"
+  database:
+    platform: linux/arm64/v8
+    container_name: database
+    image: mysql:latest
+    command: mysqld --max_allowed_packet=768M
+    networks:
+      - default-network
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_INIT_CONNECT_TIMEOUT=100
+    volumes:
+      - ./persist-data/db-data:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+
+networks:
+  default-network:
+

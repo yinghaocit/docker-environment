@@ -1,0 +1,18 @@
+#!/bin/bash
+
+container=$(docker ps -a --filter "name=$1-web-server" --format "{{.Names}}")
+if [ -z "$container" ] || [ -z "$1" ]; then
+  container="cmap-web-server"
+else
+  shift
+fi
+
+echo "执行容器" $container "at" $(date "+%Y-%m-%d %H:%M:%S")
+echo "执行命令 composer $@"
+
+# 执行docker exec命令
+docker exec -i -t \
+  --user docker \
+  --workdir /var/www/html \
+  "${container}" composer "$@"
+
