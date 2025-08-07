@@ -10,10 +10,10 @@ server {
 
 server {
     listen 443 ssl;
-    server_name local.template.com;
+    server_name local.cmap.com;
 
-    ssl_certificate /etc/nginx/local.cmap.com/ssl_certs/cert.pem;
-    ssl_certificate_key /etc/nginx/local.cmap.com/ssl_certs/key.pem;
+    ssl_certificate /etc/nginx/ssl_certs/local.cmap.com/certs/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl_certs/local.cmap.com/certs/key.pem;
 
     ssl_session_timeout 5m;
 
