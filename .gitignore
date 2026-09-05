@@ -1,5 +1,5 @@
 /persist-data/
 /etc/nginx
 !/etc/nginx/config/nignx.conf.template
-
+docker-compose.override.yml
 .idea
